@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+.champ {
+  background-color: yellow;
+  border: 2vh solid orange !important;
+  border-radius: 2vh !important;
+
+  font-size: 5vh;
+}
