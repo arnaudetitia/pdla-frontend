@@ -10,4 +10,25 @@
   align-items: center;
 
   overflow-y: auto;
+
+  .pdla-logo-container {
+    margin-top: -30vh;
+    height: 70vh;
+    overflow: hidden;
+    .pdla-logo {
+      height: 75vh;
+    }
+  }
+
+  .homepage-menu {
+    .btn {
+      width: 45vw;
+    }
+    .btn-gestion {
+      &:hover {
+        background-color: yellow;
+        border-color: rgb(128, 20, 83) !important;
+      }
+    }
+  }
 }
