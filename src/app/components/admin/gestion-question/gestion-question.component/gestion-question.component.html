@@ -25,7 +25,7 @@
             <mat-icon class="extrait-playable" (click)="playExtrait(question.musique)"
               >volume_up</mat-icon
             >
-            @if (extraitEnEcoute) {
+            @if (nomExtraitEnEcoute()) {
               <mat-icon class="extrait-playable" (click)="arreterExtrait()">stop</mat-icon>
             }
           } @else {
