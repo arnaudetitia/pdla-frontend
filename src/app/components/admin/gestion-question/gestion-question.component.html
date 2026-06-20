@@ -6,7 +6,7 @@
   </button>
   <mat-menu #newQuestionsMenu>
     <button mat-menu-item (click)="openAddDialog()">Unitairement</button>
-    <button mat-menu-item>Par import de fichier</button>
+    <button mat-menu-item (click)="openImportQuestionsDialog()">Par import de fichier</button>
   </mat-menu>
   <div class="table-wrapper">
     <table mat-table [dataSource]="allQuestions()">

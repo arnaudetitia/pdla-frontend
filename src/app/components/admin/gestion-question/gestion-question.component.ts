@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditQuestionDialogComponent } from './add-edit-question-dialog/add-edit-question-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { ImportQuestionDialogComponent } from './import-question-dialog.component/import-question-dialog.component';
 
 @Component({
   selector: 'app-gestion-question.component',
@@ -24,6 +25,7 @@ export class GestionQuestionComponent implements OnInit {
   extraitEnEcoute: HTMLAudioElement | null = null;
 
   openAddEditQuestionDialog = inject(MatDialog);
+  openImportDialog = inject(MatDialog);
 
   constructor(private questionService: QuestionService) {}
 
@@ -84,6 +86,24 @@ export class GestionQuestionComponent implements OnInit {
         action: 'edit',
         question,
       },
+      width: '75vw',
+      disableClose: true,
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        tap((questionListUpdated) => {
+          if (questionListUpdated) {
+            this.allQuestions().data = questionListUpdated;
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  openImportQuestionsDialog() {
+    const dialogRef = this.openImportDialog.open(ImportQuestionDialogComponent, {
       width: '75vw',
       disableClose: true,
     });
