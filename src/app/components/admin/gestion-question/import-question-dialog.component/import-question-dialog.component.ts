@@ -1,10 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { QuestionService } from '../../../../services/question.service';
 import { tap } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
