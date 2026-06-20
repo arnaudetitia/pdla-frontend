@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment.dev';
 import { Question, QuestionVo } from '../model/question.model';
+import { ImportError } from '../model/import-errors.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,30 @@ export class QuestionService {
     if (musicFile) {
       formData.append('musicFile', musicFile);
     }
-    return this.http.post<Question[]>(environment.apiUrl + `/questions/${idQuestion}`, formData);
+    return this.http.put<Question[]>(environment.apiUrl + `/questions/${idQuestion}`, formData);
+  }
+
+  checkImportQuestions(
+    csvFileContent: any,
+  ): Observable<{ erreurs: ImportError[]; questions: Question[] }> {
+    return this.http.post<{ erreurs: ImportError[]; questions: Question[] }>(
+      environment.apiUrl + `/questions/import`,
+      {
+        csvFileContent,
+        doImport: false,
+      },
+    );
+  }
+
+  importQuestions(
+    csvFileContent: any,
+  ): Observable<{ erreurs: ImportError[]; questions: Question[] }> {
+    return this.http.post<{ erreurs: ImportError[]; questions: Question[] }>(
+      environment.apiUrl + `/questions/import`,
+      {
+        csvFileContent,
+        doImport: true,
+      },
+    );
   }
 }
