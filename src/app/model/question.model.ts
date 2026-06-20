@@ -5,3 +5,10 @@ export interface Question {
   image: string;
   musique: string;
 }
+
+export interface QuestionVo {
+  question: string;
+  annee: number;
+  image: string;
+  musique: string;
+}
