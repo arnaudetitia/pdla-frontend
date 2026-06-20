@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>{{ data.action === 'add' ? 'Créer' : 'Éditer' }} une question</h2>
+<mat-dialog-content class="question-form-container">
+  <form [formGroup]="questionForm">
+    <div class="question-annee-form">
+      <mat-form-field class="question-field">
+        <mat-label>Question</mat-label>
+        <input matInput formControlName="question" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Annee</mat-label>
+        <input matInput type="number" min="1950" formControlName="annee" />
+      </mat-form-field>
+    </div>
+
+    <div class="image-form">
+      <mat-form-field class="image-field">
+        <mat-label>Image</mat-label>
+        <textarea matInput formControlName="image"></textarea>
+      </mat-form-field>
+
+      <img class="image-preview" src="{{ questionForm.get('image')?.value }}" />
+    </div>
+
+    <div class="music-form">
+      <mat-form-field>
+        <mat-label>Extrait musical</mat-label>
+        <input matInput readonly formControlName="musique" />
+        @if (questionForm.get('musique')?.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Effacer"
+            (click)="questionForm.patchValue({ musique: '' })"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+      <input
+        type="file"
+        #fileInput
+        accept="audio/*"
+        class="hidden"
+        (change)="onFileSelected($event)"
+      />
+      <button class="btn champ music" (click)="fileInput.click()">
+        <mat-icon>audio_file</mat-icon>
+        Choisir...
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn champ annuler" mat-dialog-close>Annuler</button>
+  <button class="btn champ" (click)="addEditQuestion()">
+    {{ data.action === 'add' ? 'Créer' : 'Éditer' }} la question
+  </button>
+</mat-dialog-actions>

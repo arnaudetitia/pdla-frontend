@@ -11,8 +11,23 @@
   font-family: 'Bahnschrift';
 
   bouton-retour,
-  h2 {
+  h2,
+  button {
     margin-bottom: 2vh;
+  }
+
+  button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: yellow;
+    width: 20vw;
+    border: 1vh solid orange;
+
+    &:hover {
+      border-color: aqua;
+    }
   }
 
   .champ {
@@ -43,7 +58,8 @@
     td {
       font-family: 'Bahnschrift';
 
-      .extrait-playable {
+      .extrait-playable,
+      .editable {
         color: rgb(128, 20, 83);
 
         &:hover {

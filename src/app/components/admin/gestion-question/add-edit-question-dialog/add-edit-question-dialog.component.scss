@@ -1,0 +1,50 @@
+.question-form-container {
+  background-color: rgb(128, 20, 83);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 3vh;
+
+    .question-annee-form {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .question-field {
+        width: 60vw;
+      }
+    }
+
+    .image-form {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .image-field {
+        width: 50vw;
+      }
+
+      .image-preview {
+        max-height: 20vh;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+  }
+}
+
+.champ {
+  font-size: 2.5vh;
+
+  &:last-of-type {
+    margin-left: 1vw;
+  }
+
+  &:hover {
+    background-color: yellow;
+    border-color: aqua !important;
+  }
+}
