@@ -1,0 +1,9 @@
+.filtre-question-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  mat-form-field {
+    margin-right: 1vw;
+  }
+}

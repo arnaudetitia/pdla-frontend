@@ -1,0 +1,36 @@
+<div class="filtre-question-container">
+  <mat-form-field>
+    <mat-select (selectionChange)="registerFilterType($event.value)">
+      @for (label of FiltreQuestionTypeLabels; track label) {
+        <mat-option [value]="label">{{ label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @switch (currentFiltreType()) {
+    @case (FiltreQuestionType.TEXTE) {
+      <mat-form-field>
+        <mat-label>Texte</mat-label>
+        <input matInput (input)="onFilterValueChange($event.target.value)" />
+      </mat-form-field>
+    }
+    @case (FiltreQuestionType.ANNEE) {
+      <mat-form-field>
+        <mat-label>De</mat-label>
+        <mat-select [(ngModel)]="borneMin" (selectionChange)="onFilterValueChange($event.value)">
+          @for (annee of anneesMinRange(); track annee) {
+            <mat-option [value]="annee">{{ annee }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>À</mat-label>
+        <mat-select [(ngModel)]="borneMax" (selectionChange)="onFilterValueChange($event.value)">
+          @for (annee of anneesMaxRange(); track annee) {
+            <mat-option [value]="annee">{{ annee }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  }
+</div>
