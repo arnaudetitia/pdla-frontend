@@ -16,6 +16,13 @@
     margin-bottom: 2vh;
   }
 
+  .gestion-question-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   button {
     display: flex;
     flex-direction: row;
