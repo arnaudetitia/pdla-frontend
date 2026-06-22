@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { BoutonRetourComponent } from '../../../shared/bouton-retour/bouton-retour.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Question } from '../../../model/question.model';
@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ImportQuestionDialogComponent } from './import-question-dialog.component/import-question-dialog.component';
 import { FiltrageQuestionComponent } from './filtrage-question/filtrage-question.component';
 import { FiltreQuestionType } from '../../../model/enums/filtre-type.enum';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-gestion-question.component',
@@ -20,6 +21,7 @@ import { FiltreQuestionType } from '../../../model/enums/filtre-type.enum';
     MatMenuModule,
     MatTableModule,
     MatIconModule,
+    MatSortModule,
   ],
   templateUrl: './gestion-question.component.html',
   styleUrl: './gestion-question.component.scss',
@@ -77,6 +79,12 @@ export class GestionQuestionComponent implements OnInit {
         }),
       )
       .subscribe();
+  }
+
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.allQuestions().sort = this.sort;
   }
 
   playExtrait(extraitName: string) {
