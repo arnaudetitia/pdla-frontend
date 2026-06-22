@@ -1,0 +1,85 @@
+.gestion-question-container {
+  display: flex;
+  flex-direction: column;
+
+  background-color: rgb(128, 20, 83);
+  width: 100vw;
+  height: 100vh;
+
+  padding: 3vh;
+
+  font-family: 'Bahnschrift';
+
+  bouton-retour,
+  h2,
+  button {
+    margin-bottom: 2vh;
+  }
+
+  .actions-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: yellow;
+    width: 20vw;
+    border: 1vh solid orange;
+
+    &:hover {
+      border-color: aqua;
+    }
+  }
+
+  .champ {
+    width: max-content;
+    padding: 1vh;
+    font-size: 4vh;
+  }
+
+  .table-wrapper {
+    flex: 1;
+    overflow: auto;
+    border: 2vh solid black;
+    border-radius: 3vh;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .mat-column-question {
+      max-width: 15vw;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    td {
+      font-family: 'Bahnschrift';
+
+      .extrait-playable,
+      .editable {
+        color: rgb(128, 20, 83);
+
+        &:hover {
+          color: orange;
+          cursor: pointer;
+        }
+      }
+    }
+
+    img {
+      padding-top: 1vh;
+      padding-bottom: 1vh;
+      height: 10vh;
+    }
+  }
+}
