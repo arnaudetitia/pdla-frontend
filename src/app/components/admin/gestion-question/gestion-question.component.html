@@ -12,14 +12,14 @@
     <filtrage-question (onFiltreValueChange)="updateFiltre($event)"></filtrage-question>
   </div>
   <div class="table-wrapper">
-    <table mat-table [dataSource]="allQuestions()">
+    <table mat-table matSort [dataSource]="allQuestions()">
       <ng-container matColumnDef="question">
         <th mat-header-cell *matHeaderCellDef>Question</th>
         <td mat-cell *matCellDef="let question">{{ question.question }}</td>
       </ng-container>
 
       <ng-container matColumnDef="annee">
-        <th mat-header-cell *matHeaderCellDef>Année</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Année</th>
         <td mat-cell *matCellDef="let question">{{ question.annee }}</td>
       </ng-container>
 
