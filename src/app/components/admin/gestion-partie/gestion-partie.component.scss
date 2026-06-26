@@ -1,0 +1,49 @@
+.gestion-partie-container {
+  display: flex;
+  flex-direction: column;
+
+  background-color: rgb(128, 20, 83);
+  width: 100vw;
+  height: 100vh;
+
+  padding: 3vh;
+
+  font-family: 'Bahnschrift';
+
+  bouton-retour,
+  h2,
+  button {
+    margin-bottom: 2vh;
+  }
+
+  .champ {
+    width: max-content;
+    padding: 1vh;
+    font-size: 4vh;
+  }
+
+  .table-wrapper {
+    overflow: auto;
+    border: 2vh solid black;
+    border-radius: 3vh;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      font-weight: bold;
+    }
+
+    td {
+      font-family: 'Bahnschrift';
+
+      a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  }
+}
