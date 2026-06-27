@@ -3,7 +3,7 @@ import { BoutonRetourComponent } from '../../../shared/bouton-retour/bouton-reto
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Question } from '../../../model/question.model';
 import { QuestionService } from '../../../services/question.service';
-import { tap } from 'rxjs';
+import { combineLatest, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditQuestionDialogComponent } from './add-edit-question-dialog/add-edit-question-dialog.component';
@@ -12,6 +12,7 @@ import { ImportQuestionDialogComponent } from './import-question-dialog.componen
 import { FiltrageQuestionComponent } from './filtrage-question/filtrage-question.component';
 import { FiltreQuestionType } from '../../../model/enums/filtre-type.enum';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-gestion-question.component',
@@ -39,20 +40,27 @@ export class GestionQuestionComponent implements OnInit {
   openAddEditQuestionDialog = inject(MatDialog);
   openImportDialog = inject(MatDialog);
 
+  idPartieFromUrl = signal<number | null>(null);
+
   filterTexte = signal<string>('');
   filtreAnnee = signal<{ borneMin: number; borneMax: number }>({
     borneMin: this.YEAR_MIN,
     borneMax: this.YEAR_MAX,
   });
+  filtrePartie = signal<number[]>([]);
 
   filtre = computed(() => {
     return {
       texte: this.filterTexte(),
       annees: this.filtreAnnee(),
+      partie: this.filtrePartie(),
     };
   });
 
-  constructor(private questionService: QuestionService) {
+  constructor(
+    private questionService: QuestionService,
+    private activatedRoute: ActivatedRoute,
+  ) {
     this.allQuestions().filterPredicate = (question: Question, filtre: string) => {
       const filtreParsed = JSON.parse(filtre);
       let questionContainsTexte = true;
@@ -65,17 +73,24 @@ export class GestionQuestionComponent implements OnInit {
       const anneeFilter = filtreParsed.annees;
       const questionAnneesInBornes =
         anneeFilter.borneMin <= question.annee && question.annee <= anneeFilter.borneMax;
-      return questionContainsTexte && questionAnneesInBornes;
+      const partieFilter = filtreParsed.partie;
+      let questionInPartie = true;
+      if (partieFilter.length > 0) {
+        questionInPartie = partieFilter.includes(question.id);
+      }
+      return questionContainsTexte && questionAnneesInBornes && questionInPartie;
     };
     this.allQuestions().filter = JSON.stringify(this.filtre());
   }
 
   ngOnInit(): void {
-    this.questionService
-      .getAllQuestion()
+    combineLatest([this.questionService.getAllQuestion(), this.activatedRoute.queryParams])
       .pipe(
-        tap((questions) => {
+        tap(([questions, params]) => {
           this.allQuestions().data = questions;
+          if (params['idPartie']) {
+            this.idPartieFromUrl.set(Number.parseInt(params['idPartie']));
+          }
         }),
       )
       .subscribe();
@@ -169,16 +184,20 @@ export class GestionQuestionComponent implements OnInit {
 
   updateFiltre(filtre: {
     typeFiltre: FiltreQuestionType;
-    value: string | { borneMin: number; borneMax: number } | null;
+    value: string | { borneMin: number; borneMax: number } | number[] | null;
   }) {
     this.filterTexte.set('');
     this.filtreAnnee.set({ borneMin: this.YEAR_MIN, borneMax: this.YEAR_MAX });
+    this.filtrePartie.set([]);
     switch (filtre.typeFiltre) {
       case FiltreQuestionType.TEXTE:
         this.filterTexte.set(filtre.value as string);
         break;
       case FiltreQuestionType.ANNEE:
         this.filtreAnnee.set(filtre.value as any);
+        break;
+      case FiltreQuestionType.PARTIE:
+        this.filtrePartie.set(filtre.value as any);
         break;
     }
     this.allQuestions().filter = JSON.stringify(this.filtre());

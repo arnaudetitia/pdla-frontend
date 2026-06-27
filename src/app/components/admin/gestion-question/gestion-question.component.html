@@ -9,7 +9,10 @@
       <button mat-menu-item (click)="openAddDialog()">Unitairement</button>
       <button mat-menu-item (click)="openImportQuestionsDialog()">Par import de fichier</button>
     </mat-menu>
-    <filtrage-question (onFiltreValueChange)="updateFiltre($event)"></filtrage-question>
+    <filtrage-question
+      [idPartieFromUrl]="idPartieFromUrl()"
+      (onFiltreValueChange)="updateFiltre($event)"
+    ></filtrage-question>
   </div>
   <div class="table-wrapper">
     <table mat-table matSort [dataSource]="allQuestions()">
