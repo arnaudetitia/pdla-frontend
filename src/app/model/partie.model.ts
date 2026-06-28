@@ -5,3 +5,8 @@ export interface Partie {
   nomPartie: string;
   listeQuestions: Question[];
 }
+
+export interface PartieVo {
+  nomPartie: string;
+  idsQuestions: number[];
+}

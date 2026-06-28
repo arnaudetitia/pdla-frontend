@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Créer une partie</h2>
+<mat-dialog-content class="partie-form-container">
+  <form [formGroup]="partieForm">
+    <mat-form-field>
+      <mat-label>Nom de la partie</mat-label>
+      <input matInput formControlName="nomPartie" />
+    </mat-form-field>
+    <div class="questions-list-form">
+      <mat-form-field class="questions-list-selector">
+        <mat-label>Liste des questions</mat-label>
+        <mat-select
+          multiple
+          formControlName="listeQuestions"
+          (selectionChange)="updateEtatSelection($event)"
+        >
+          @for (question of allQuestions(); track question) {
+            <mat-option
+              [value]="question.id"
+              [disabled]="
+                nbMaxQuestionSelected() &&
+                !partieForm.get('listeQuestions')?.value.includes(question.id)
+              "
+              >{{ question.question }} ({{ question.annee }})</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        class="btn champ mass-add-question"
+        (click)="ajouterQuestions()"
+        [disabled]="!canMassAjoutBeClicked()"
+      >
+        @if (nbQuestionsSelected() === 0) {
+          Veuillez selectionner au moins une question
+        } @else if (nbQuestionsSelected() === 20) {
+          Vous avez sélectionné toutes les questions
+        } @else {
+          Ajouter les {{ 20 - nbQuestionsSelected() }} questions suivantes
+        }
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="btn champ annuler" mat-dialog-close>Annuler</button>
+  <button class="btn champ" (click)="creerPartie()" [disabled]="partieForm.invalid">
+    Créer la partie
+  </button>
+</mat-dialog-actions>
