@@ -21,10 +21,14 @@
   }
 
   .homepage-menu {
+    display: flex;
+    flex-direction: column;
     .btn {
       width: 45vw;
     }
     .btn-gestion {
+      margin-top: 2vh;
+
       &:hover {
         background-color: yellow;
         border-color: rgb(128, 20, 83) !important;
