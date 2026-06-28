@@ -1,0 +1,36 @@
+.partie-form-container {
+  background-color: rgb(128, 20, 83);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 3vh;
+
+  .questions-list-form {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+
+    .questions-list-selector {
+      width: 49vw;
+    }
+  }
+}
+
+.champ {
+  font-size: 2.5vh;
+
+  &.mass-add-question {
+    font-size: 2vh !important;
+  }
+
+  &:last-of-type {
+    margin-left: 1vw;
+  }
+
+  &:hover {
+    background-color: yellow;
+    border-color: aqua !important;
+  }
+}
