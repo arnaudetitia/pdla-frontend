@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.dev';
 import { Partie, PartieVo } from '../model/partie.model';
+import { Question } from '../model/question.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,5 +19,9 @@ export class PartieService {
     return this.http.post<Partie[]>(environment.apiUrl + '/parties', {
       partie: JSON.stringify(partie),
     });
+  }
+
+  getPartieById(idPartie: number): Observable<Question[]> {
+    return this.http.get<Question[]>(environment.apiUrl + `/parties/${idPartie}`);
   }
 }
