@@ -54,10 +54,10 @@ export class AddEditQuestionDialogComponent {
 
   addEditQuestion() {
     const questionEdited: QuestionVo = {
-      question: this.questionForm.get('question')?.value,
+      question: this.questionForm.get('question')?.value.trim(),
       annee: this.questionForm.get('annee')?.value,
-      image: this.questionForm.get('image')?.value,
-      musique: this.questionForm.get('musique')?.value,
+      image: this.questionForm.get('image')?.value.trim(),
+      musique: this.questionForm.get('musique')?.value.trim(),
     };
 
     const addEditObservable = this.data.question
