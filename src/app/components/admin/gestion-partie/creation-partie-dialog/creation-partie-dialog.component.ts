@@ -80,8 +80,8 @@ export class CreationPartieDialogComponent implements OnInit {
 
   creerPartie() {
     const partieToCreate = {
-      nomPartie: this.partieForm.get('nomPartie')?.value,
-      idsQuestions: this.partieForm.get('listeQuestions')?.value,
+      nomPartie: this.partieForm.get('nomPartie')?.value.trim(),
+      idsQuestions: this.partieForm.get('listeQuestions')?.value.trim(),
     };
 
     this.partieService
