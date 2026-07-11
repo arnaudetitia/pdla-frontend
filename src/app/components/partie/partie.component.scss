@@ -88,6 +88,10 @@
         &.annee-courante {
           border-color: darkorange;
           border-width: 10px;
+
+          &.reponse-confirmee {
+            border-color: blue;
+          }
         }
 
         &.bonne-annee {

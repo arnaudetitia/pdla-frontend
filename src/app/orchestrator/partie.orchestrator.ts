@@ -20,6 +20,12 @@ export class PartieOrchestrator {
         this.etatQuestion = EtatQuestion.QUESTION_AFFICHEE;
         break;
       case EtatQuestion.QUESTION_AFFICHEE:
+        this.etatQuestion = EtatQuestion.REPONSE_DONNEE;
+        break;
+      case EtatQuestion.REPONSE_DONNEE:
+        this.etatQuestion = EtatQuestion.REPONSE_REVELEE;
+        break;
+      case EtatQuestion.REPONSE_REVELEE:
         this.etatQuestion = EtatQuestion.START_QUESTION;
         break;
       default:

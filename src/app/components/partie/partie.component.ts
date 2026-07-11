@@ -1,14 +1,16 @@
 import { Component, computed, HostListener, OnInit, signal } from '@angular/core';
 import { PartieService } from '../../services/partie.service';
 import { PartieStore } from '../../stores/partie.store';
-import { switchMap, tap } from 'rxjs';
+import { combineLatest, switchMap, tap } from 'rxjs';
 import { Question } from '../../model/question.model';
 import { PartieOrchestrator } from '../../orchestrator/partie.orchestrator';
 import { EtatQuestion } from '../../model/enums/etat-question.enum';
 import { MusicPlayer } from '../../utils/music-player.util';
 import { CodeTouches } from '../../model/enums/codes-touches.enum';
-import { Marge } from '../../model/marge.model';
+import { DEFAULT_MARGE, Marge } from '../../model/marge.model';
 import { CommonModule } from '@angular/common';
+import { SocketService } from '../../services/socket.service';
+import { ReponsesStore } from '../../stores/reponses.store';
 
 @Component({
   selector: 'app-partie.component',
@@ -32,11 +34,8 @@ export class PartieComponent implements OnInit {
 
   currentEtatQuestion = signal<EtatQuestion>(EtatQuestion.START_QUESTION);
 
-  currentAnnee = signal<number>(1985);
-  currentMarge = signal<Marge>({
-    anneesMarge: 3,
-    points: 1,
-  });
+  currentAnnee = signal<number>(this.MIN_YEAR);
+  currentMarge = signal<Marge>(DEFAULT_MARGE);
 
   friseRange = Array.from({ length: 11 }, (_, i) => i);
 
@@ -44,6 +43,8 @@ export class PartieComponent implements OnInit {
     private partieStore: PartieStore,
     private partieService: PartieService,
     private partieOrchestrator: PartieOrchestrator,
+    private reponseStore: ReponsesStore,
+    private socketService: SocketService,
   ) {}
 
   ngOnInit() {
@@ -64,6 +65,8 @@ export class PartieComponent implements OnInit {
           switch (this.currentEtatQuestion()) {
             case EtatQuestion.START_QUESTION:
               this.indexCurentQuestion.update((prev) => prev + 1);
+              this.currentAnnee.set(this.MIN_YEAR);
+              this.currentMarge.set(DEFAULT_MARGE);
               break;
             case EtatQuestion.IMAGE_AFFICHEE:
               MusicPlayer.playMusic(this.currentQuestion().musique);
@@ -71,6 +74,14 @@ export class PartieComponent implements OnInit {
             default:
               break;
           }
+        }),
+      )
+      .subscribe();
+    combineLatest([this.reponseStore.annee$, this.reponseStore.marge$])
+      .pipe(
+        tap(([annee, marge]) => {
+          this.currentAnnee.set(annee || this.MIN_YEAR);
+          this.currentMarge.set(marge || DEFAULT_MARGE);
         }),
       )
       .subscribe();
@@ -96,12 +107,7 @@ export class PartieComponent implements OnInit {
         MusicPlayer.playMusic(this.currentQuestion().musique);
         break;
       case CodeTouches.SUIVANT:
-        if (this.currentEtatQuestion() === EtatQuestion.QUESTION_AFFICHEE) {
-          this.currentAnnee.set(this.MIN_YEAR);
-          this.currentMarge.set({
-            anneesMarge: 3,
-            points: 1,
-          });
+        if (this.currentEtatQuestion() === EtatQuestion.REPONSE_REVELEE) {
           this.partieOrchestrator.passerEtatSuivant();
         }
         break;
