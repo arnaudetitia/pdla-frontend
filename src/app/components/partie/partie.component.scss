@@ -58,6 +58,45 @@
       }
     }
   }
+
+  .frise-annees-container {
+    display: flex;
+    flex-direction: column;
+
+    .frise-annees-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      height: 40vh;
+
+      .frise-item {
+        flex: 1;
+        padding: 1vh;
+
+        background-color: lightgray;
+        border: 5px solid black;
+        border-radius: 2vh;
+
+        font-size: 3vw;
+        text-align: center;
+
+        &.dans-marge {
+          background-color: yellow;
+        }
+
+        &.annee-courante {
+          border-color: darkorange;
+          border-width: 10px;
+        }
+
+        &.bonne-annee {
+          border-color: #00a933;
+          border-width: 10px;
+        }
+      }
+    }
+  }
 }
 
 @keyframes zoomImage {

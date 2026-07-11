@@ -13,4 +13,24 @@
       }
     </div>
   </div>
+  <div class="frise-annees-container">
+    <div class="frise-annees-wrapper">
+      @for (index of friseRange; track index) {
+        <div
+          class="frise-item"
+          [ngClass]="{
+            'dans-marge': anneeInMarge(5 - index),
+            'annee-courante': 5 - index === 0,
+            'bonne-annee': currentAnnee() - 5 + index === currentQuestion().annee,
+          }"
+        >
+          @if (currentAnnee() - 5 + index >= MIN_YEAR && currentAnnee() - 5 + index <= MAX_YEAR) {
+            <span>{{ currentAnnee() - 5 + index }}</span>
+          } @else {
+            <span>&nbsp;</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
 </div>
