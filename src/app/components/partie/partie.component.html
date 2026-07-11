@@ -21,7 +21,13 @@
           [ngClass]="{
             'dans-marge': anneeInMarge(5 - index),
             'annee-courante': 5 - index === 0,
-            'bonne-annee': currentAnnee() - 5 + index === currentQuestion().annee,
+            'reponse-confirmee': [
+              EtatQuestion.REPONSE_DONNEE,
+              EtatQuestion.REPONSE_REVELEE,
+            ].includes(currentEtatQuestion()),
+            'bonne-annee':
+              currentEtatQuestion() === EtatQuestion.REPONSE_REVELEE &&
+              currentAnnee() - 5 + index === currentQuestion()?.annee,
           }"
         >
           @if (currentAnnee() - 5 + index >= MIN_YEAR && currentAnnee() - 5 + index <= MAX_YEAR) {
