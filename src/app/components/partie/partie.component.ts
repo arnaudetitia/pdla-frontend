@@ -11,6 +11,7 @@ import { DEFAULT_MARGE, Marge } from '../../model/marge.model';
 import { CommonModule } from '@angular/common';
 import { SocketService } from '../../services/socket.service';
 import { ReponsesStore } from '../../stores/reponses.store';
+import { EquipeService } from '../../services/equipe.service';
 
 @Component({
   selector: 'app-partie.component',
@@ -43,6 +44,7 @@ export class PartieComponent implements OnInit {
     private partieStore: PartieStore,
     private partieService: PartieService,
     private partieOrchestrator: PartieOrchestrator,
+    private equipeService: EquipeService,
     private reponseStore: ReponsesStore,
     private socketService: SocketService,
   ) {}
@@ -67,6 +69,7 @@ export class PartieComponent implements OnInit {
               this.indexCurentQuestion.update((prev) => prev + 1);
               this.currentAnnee.set(this.MIN_YEAR);
               this.currentMarge.set(DEFAULT_MARGE);
+              this.equipeService.changerTour().subscribe();
               break;
             case EtatQuestion.IMAGE_AFFICHEE:
               MusicPlayer.playMusic(this.currentQuestion().musique);
@@ -99,7 +102,11 @@ export class PartieComponent implements OnInit {
   handleKeyEvent(event$: KeyboardEvent) {
     switch (event$.code) {
       case CodeTouches.ESPACE:
-        if (this.currentEtatQuestion() !== EtatQuestion.QUESTION_AFFICHEE) {
+        if (
+          ![EtatQuestion.QUESTION_AFFICHEE, EtatQuestion.REPONSE_REVELEE].includes(
+            this.currentEtatQuestion(),
+          )
+        ) {
           this.partieOrchestrator.passerEtatSuivant();
         }
         break;
