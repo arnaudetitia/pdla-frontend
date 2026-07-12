@@ -14,4 +14,8 @@ export class EquipeService {
       equipes: JSON.stringify(equipes),
     });
   }
+
+  changerTour(): Observable<void> {
+    return this.http.put<void>(environment.apiUrl + '/equipes/changer-tour', {});
+  }
 }
