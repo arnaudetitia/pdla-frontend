@@ -1,0 +1,19 @@
+table {
+  border-collapse: collapse;
+
+  th,
+  tr,
+  td {
+    text-align: center;
+    font-family: 'Bahnschrift';
+    border: 1px solid black;
+  }
+
+  tr > td:not(:first-of-type) {
+    font-size: 3.5vh;
+  }
+
+  th {
+    font-weight: bolder;
+  }
+}
