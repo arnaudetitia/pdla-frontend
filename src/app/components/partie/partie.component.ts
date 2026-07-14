@@ -1,4 +1,4 @@
-import { Component, computed, HostListener, OnInit, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
 import { PartieService } from '../../services/partie.service';
 import { PartieStore } from '../../stores/partie.store';
 import { combineLatest, switchMap, tap } from 'rxjs';
@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { SocketService } from '../../services/socket.service';
 import { ReponsesStore } from '../../stores/reponses.store';
 import { EquipeService } from '../../services/equipe.service';
+import { EquipeStore } from '../../stores/equipe.store';
+import { MatDialog } from '@angular/material/dialog';
+import { ScoreDialogComponent } from './score-dialog.component/score-dialog.component';
 
 @Component({
   selector: 'app-partie.component',
@@ -40,11 +43,16 @@ export class PartieComponent implements OnInit {
 
   friseRange = Array.from({ length: 11 }, (_, i) => i);
 
+  openScoresDialog = inject(MatDialog);
+
+  scoreShown = false;
+
   constructor(
     private partieStore: PartieStore,
     private partieService: PartieService,
     private partieOrchestrator: PartieOrchestrator,
     private equipeService: EquipeService,
+    private equipesStore: EquipeStore,
     private reponseStore: ReponsesStore,
     private socketService: SocketService,
   ) {}
@@ -73,6 +81,14 @@ export class PartieComponent implements OnInit {
               break;
             case EtatQuestion.IMAGE_AFFICHEE:
               MusicPlayer.playMusic(this.currentQuestion().musique);
+              break;
+            case EtatQuestion.REPONSE_REVELEE:
+              const scoreQuestion =
+                Math.abs(this.currentAnnee() - this.currentQuestion().annee) <=
+                this.currentMarge().anneesMarge
+                  ? this.currentMarge().points
+                  : 0;
+              this.equipesStore.setScore(scoreQuestion);
               break;
             default:
               break;
@@ -112,6 +128,18 @@ export class PartieComponent implements OnInit {
         break;
       case CodeTouches.PLAY_MUSIC_AGAIN:
         MusicPlayer.playMusic(this.currentQuestion().musique);
+        break;
+      case CodeTouches.SCORES:
+        this.scoreShown = !this.scoreShown;
+        if (this.scoreShown) {
+          const dialogRef = this.openScoresDialog.open(ScoreDialogComponent, {
+            width: '75vw',
+            disableClose: true,
+          });
+        } else {
+          this.openScoresDialog.closeAll();
+        }
+
         break;
       case CodeTouches.SUIVANT:
         if (this.currentEtatQuestion() === EtatQuestion.REPONSE_REVELEE) {
