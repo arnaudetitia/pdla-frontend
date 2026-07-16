@@ -7,7 +7,13 @@
   @for (indexManche of indexMancheArray; track indexManche) {
     <ng-container [matColumnDef]="'manche-' + (indexManche + 1)">
       <th mat-header-cell *matHeaderCellDef>Manche {{ indexManche + 1 }}</th>
-      <td mat-cell *matCellDef="let scoreRow">{{ scoreRow.scores[indexManche] ?? '-' }}</td>
+      <td mat-cell *matCellDef="let scoreRow">
+        {{
+          scoreRow.resultatsManches[indexManche]
+            ? scoreRow.resultatsManches[indexManche].points
+            : '-'
+        }}
+      </td>
     </ng-container>
   }
 
@@ -19,3 +25,11 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
+@if (afficherVainqueur) {
+  <div class="equipe-gagnant-container">
+    <span
+      >L'équipe {{ equipeGagnante }} a gagné
+      {{ egalitePoints ? '(par écart des années)' : '' }}</span
+    >
+  </div>
+}
