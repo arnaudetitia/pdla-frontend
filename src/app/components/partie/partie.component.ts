@@ -84,12 +84,21 @@ export class PartieComponent implements OnInit {
               } else {
                 this.currentAnnee.set(this.MIN_YEAR);
                 this.currentMarge.set(DEFAULT_MARGE);
-                this.equipeService.changerTour().subscribe();
+                this.equipeService
+                  .changerTour()
+                  .pipe(
+                    switchMap(() => {
+                      return this.partieService.toggleVotes(false);
+                    }),
+                  )
+                  .subscribe();
               }
-
               break;
             case EtatQuestion.IMAGE_AFFICHEE:
               MusicPlayer.playMusic(this.currentQuestion().musique);
+              break;
+            case EtatQuestion.QUESTION_AFFICHEE:
+              this.partieService.toggleVotes(true).subscribe();
               break;
             case EtatQuestion.REPONSE_REVELEE:
               const ecart = Math.abs(this.currentAnnee() - this.currentQuestion().annee);
