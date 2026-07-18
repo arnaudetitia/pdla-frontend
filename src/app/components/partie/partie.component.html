@@ -41,6 +41,11 @@
           </div>
         }
       </div>
+      @if (currentEtatQuestion() === EtatQuestion.REPONSE_REVELEE && horsFrise()) {
+        <div class="bonne-annee-container">
+          <div class="bonne-annee-item bonne-annee">{{ currentQuestion().annee }}</div>
+        </div>
+      }
     </div>
   } @else {
     <scores-table [afficherVainqueur]="true"></scores-table>
