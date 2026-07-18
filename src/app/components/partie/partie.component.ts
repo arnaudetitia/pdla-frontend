@@ -15,10 +15,11 @@ import { EquipeService } from '../../services/equipe.service';
 import { EquipeStore } from '../../stores/equipe.store';
 import { MatDialog } from '@angular/material/dialog';
 import { ScoreDialogComponent } from './score-dialog.component/score-dialog.component';
+import { ScoresComponent } from '../../shared/scores/scores.component';
 
 @Component({
   selector: 'app-partie.component',
-  imports: [CommonModule],
+  imports: [CommonModule, ScoresComponent],
   templateUrl: './partie.component.html',
   styleUrl: './partie.component.scss',
 })
@@ -30,10 +31,10 @@ export class PartieComponent implements OnInit {
   EtatQuestion = EtatQuestion;
 
   listeQuestions = signal<Question[]>([]);
-  indexCurentQuestion = signal(1);
+  indexCurrentQuestion = signal(17);
 
   currentQuestion = computed(() => {
-    return this.listeQuestions()[this.indexCurentQuestion() - 1];
+    return this.listeQuestions()[this.indexCurrentQuestion() - 1];
   });
 
   currentEtatQuestion = signal<EtatQuestion>(EtatQuestion.START_QUESTION);
@@ -46,6 +47,8 @@ export class PartieComponent implements OnInit {
   openScoresDialog = inject(MatDialog);
 
   scoreShown = false;
+
+  partieTermine = signal<boolean>(false);
 
   constructor(
     private partieStore: PartieStore,
@@ -74,21 +77,25 @@ export class PartieComponent implements OnInit {
           this.currentEtatQuestion.set(newEtatQuestion);
           switch (this.currentEtatQuestion()) {
             case EtatQuestion.START_QUESTION:
-              this.indexCurentQuestion.update((prev) => prev + 1);
-              this.currentAnnee.set(this.MIN_YEAR);
-              this.currentMarge.set(DEFAULT_MARGE);
-              this.equipeService.changerTour().subscribe();
+              this.indexCurrentQuestion.update((prev) => prev + 1);
+              if (this.indexCurrentQuestion() > this.listeQuestions().length) {
+                this.partieTermine.set(true);
+                this.partieService.makePartieTermine().subscribe();
+              } else {
+                this.currentAnnee.set(this.MIN_YEAR);
+                this.currentMarge.set(DEFAULT_MARGE);
+                this.equipeService.changerTour().subscribe();
+              }
+
               break;
             case EtatQuestion.IMAGE_AFFICHEE:
               MusicPlayer.playMusic(this.currentQuestion().musique);
               break;
             case EtatQuestion.REPONSE_REVELEE:
+              const ecart = Math.abs(this.currentAnnee() - this.currentQuestion().annee);
               const scoreQuestion =
-                Math.abs(this.currentAnnee() - this.currentQuestion().annee) <=
-                this.currentMarge().anneesMarge
-                  ? this.currentMarge().points
-                  : 0;
-              this.equipesStore.setScore(scoreQuestion);
+                ecart <= this.currentMarge().anneesMarge ? this.currentMarge().points : 0;
+              this.equipesStore.setScore(scoreQuestion, ecart);
               break;
             default:
               break;

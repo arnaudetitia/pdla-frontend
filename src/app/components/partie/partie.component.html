@@ -1,42 +1,48 @@
 <div class="partie-container">
-  <div class="question-container">
-    @if (currentEtatQuestion() !== EtatQuestion.START_QUESTION) {
-      <div class="champ image-question-container">
-        <img src="{{ currentQuestion().image }}" />
-      </div>
-    }
-    <div class="champ libelle-question-container">
-      @if (
-        ![EtatQuestion.START_QUESTION, EtatQuestion.IMAGE_AFFICHEE].includes(currentEtatQuestion())
-      ) {
-        <span class="question-text">{{ currentQuestion().question }}</span>
-      }
-    </div>
-  </div>
-  <div class="frise-annees-container">
-    <div class="frise-annees-wrapper">
-      @for (index of friseRange; track index) {
-        <div
-          class="frise-item"
-          [ngClass]="{
-            'dans-marge': anneeInMarge(5 - index),
-            'annee-courante': 5 - index === 0,
-            'reponse-confirmee': [
-              EtatQuestion.REPONSE_DONNEE,
-              EtatQuestion.REPONSE_REVELEE,
-            ].includes(currentEtatQuestion()),
-            'bonne-annee':
-              currentEtatQuestion() === EtatQuestion.REPONSE_REVELEE &&
-              currentAnnee() - 5 + index === currentQuestion()?.annee,
-          }"
-        >
-          @if (currentAnnee() - 5 + index >= MIN_YEAR && currentAnnee() - 5 + index <= MAX_YEAR) {
-            <span>{{ currentAnnee() - 5 + index }}</span>
-          } @else {
-            <span>&nbsp;</span>
-          }
+  @if (!partieTermine()) {
+    <div class="question-container">
+      @if (currentEtatQuestion() !== EtatQuestion.START_QUESTION) {
+        <div class="champ image-question-container">
+          <img src="{{ currentQuestion().image }}" />
         </div>
       }
+      <div class="champ libelle-question-container">
+        @if (
+          ![EtatQuestion.START_QUESTION, EtatQuestion.IMAGE_AFFICHEE].includes(
+            currentEtatQuestion()
+          )
+        ) {
+          <span class="question-text">{{ currentQuestion().question }}</span>
+        }
+      </div>
     </div>
-  </div>
+    <div class="frise-annees-container">
+      <div class="frise-annees-wrapper">
+        @for (index of friseRange; track index) {
+          <div
+            class="frise-item"
+            [ngClass]="{
+              'dans-marge': anneeInMarge(5 - index),
+              'annee-courante': 5 - index === 0,
+              'reponse-confirmee': [
+                EtatQuestion.REPONSE_DONNEE,
+                EtatQuestion.REPONSE_REVELEE,
+              ].includes(currentEtatQuestion()),
+              'bonne-annee':
+                currentEtatQuestion() === EtatQuestion.REPONSE_REVELEE &&
+                currentAnnee() - 5 + index === currentQuestion()?.annee,
+            }"
+          >
+            @if (currentAnnee() - 5 + index >= MIN_YEAR && currentAnnee() - 5 + index <= MAX_YEAR) {
+              <span>{{ currentAnnee() - 5 + index }}</span>
+            } @else {
+              <span>&nbsp;</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <scores-table [afficherVainqueur]="true"></scores-table>
+  }
 </div>

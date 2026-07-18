@@ -1,40 +1,41 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, take, tap } from 'rxjs';
 import { EquipeService } from '../services/equipe.service';
+import { ResultatManche } from '../model/resultat-manches.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EquipeStore {
-  scoresEquipesSubject = new BehaviorSubject<Map<string, (number | null)[]>>(new Map());
-  scoresEquipes$ = this.scoresEquipesSubject.asObservable();
+  resultatsManchesEquipesSubject = new BehaviorSubject<Map<string, ResultatManche[]>>(new Map());
+  resultatsManchesEquipes$ = this.resultatsManchesEquipesSubject.asObservable();
 
   constructor(private equipeService: EquipeService) {}
 
   initScores(equipes: string[]) {
-    const initialScoresEquipes = new Map();
+    const initialResultatsEquipes = new Map();
     equipes.forEach((equipe) => {
-      initialScoresEquipes.set(equipe, Array(10).fill(null));
+      initialResultatsEquipes.set(equipe, Array(10).fill(null));
     });
-    this.scoresEquipesSubject.next(initialScoresEquipes);
+    this.resultatsManchesEquipesSubject.next(initialResultatsEquipes);
   }
 
-  setScore(score: number) {
-    combineLatest([this.equipeService.getEquipeEnJeu(), this.scoresEquipes$])
+  setScore(points: number, ecart: number) {
+    combineLatest([this.equipeService.getEquipeEnJeu(), this.resultatsManchesEquipes$])
       .pipe(
         take(1),
-        tap(([equipeEnJeu, scoresMap]) => {
-          const previousScoresEquipe = scoresMap.get(equipeEnJeu);
+        tap(([equipeEnJeu, resultatMap]) => {
+          const previousScoresEquipe = resultatMap.get(equipeEnJeu);
           if (previousScoresEquipe) {
             const indexToFill = previousScoresEquipe.findIndex(
               (previoiusScore) => previoiusScore === null,
             );
             if (indexToFill !== -1) {
               let newScoresEquipe = [...previousScoresEquipe];
-              newScoresEquipe[indexToFill] = score;
-              const newMap = new Map(scoresMap);
+              newScoresEquipe[indexToFill] = { points, ecart };
+              const newMap = new Map(resultatMap);
               newMap.set(equipeEnJeu, newScoresEquipe);
-              this.scoresEquipesSubject.next(newMap);
+              this.resultatsManchesEquipesSubject.next(newMap);
             }
           }
         }),
