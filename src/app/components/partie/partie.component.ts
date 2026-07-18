@@ -1,7 +1,7 @@
 import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
 import { PartieService } from '../../services/partie.service';
 import { PartieStore } from '../../stores/partie.store';
-import { combineLatest, forkJoin, switchMap, tap } from 'rxjs';
+import { combineLatest, switchMap, tap } from 'rxjs';
 import { Question } from '../../model/question.model';
 import { PartieOrchestrator } from '../../orchestrator/partie.orchestrator';
 import { EtatQuestion } from '../../model/enums/etat-question.enum';
