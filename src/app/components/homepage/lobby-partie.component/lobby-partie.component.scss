@@ -1,0 +1,35 @@
+h2 {
+  padding: 2vh;
+}
+
+.lobby-partie-container {
+  background-color: blue;
+
+  .equipes-form-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .equipe-input {
+      width: 20vw;
+
+      mat-hint {
+        color: white;
+      }
+    }
+  }
+
+  .partie-form-container {
+    width: 100%;
+  }
+}
+
+.champ {
+  width: max-content;
+  padding: 1vh;
+  font-size: 3vh;
+
+  &.lancer-partie {
+    margin-left: 1vw;
+  }
+}

@@ -1,0 +1,40 @@
+table {
+  border-collapse: collapse;
+
+  th,
+  tr,
+  td {
+    text-align: center;
+    font-family: 'Bahnschrift';
+    border: 1px solid black;
+  }
+
+  tr > td:not(:first-of-type) {
+    font-size: 3.5vh;
+  }
+
+  th {
+    font-weight: bolder;
+  }
+}
+
+.equipe-gagnant-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 30vh;
+
+  span {
+    padding: 2vh;
+    border: 2vh solid orange;
+    border-radius: 2vh;
+
+    background-color: yellow;
+
+    font-family: 'Bahnschrift';
+    font-size: 5vh;
+  }
+}

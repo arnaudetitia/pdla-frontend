@@ -1,0 +1,145 @@
+.partie-container {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #ff1744;
+  width: 100vw;
+  height: 100vh;
+
+  padding: 2vh;
+
+  font-family: 'Bahnschrift';
+
+  .question-container {
+    display: flex;
+    flex-direction: row;
+
+    height: 40vh;
+
+    .image-question-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 75vw;
+      margin-right: 2vw;
+      padding: 2vh;
+
+      animation: zoomImage 1s linear both;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+    }
+
+    .libelle-question-container {
+      display: flex;
+      flex-direction: column;
+
+      padding: 2vh;
+
+      width: 23vw;
+      margin-left: auto;
+
+      justify-content: center;
+      text-align: center;
+
+      .question-text {
+        display: inline-block;
+        font-size: clamp(1rem, 2vw, 2rem);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+
+        animation: apparitionTexte 1s linear both;
+      }
+    }
+  }
+
+  .frise-annees-container {
+    display: flex;
+    flex-direction: column;
+
+    .frise-annees-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      height: 40vh;
+
+      .frise-item {
+        flex: 1;
+        padding: 1vh;
+
+        background-color: lightgray;
+        border: 5px solid black;
+        border-radius: 2vh;
+
+        font-size: 3vw;
+        text-align: center;
+
+        &.dans-marge {
+          background-color: yellow;
+        }
+
+        &.annee-courante {
+          border-color: darkorange;
+          border-width: 10px;
+
+          &.reponse-confirmee {
+            border-color: blue;
+          }
+
+          &.bonne-annee {
+            border-color: #00a933;
+          }
+        }
+
+        &.bonne-annee {
+          border-color: #00a933;
+          border-width: 10px;
+        }
+      }
+    }
+  }
+
+  .bonne-annee-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .bonne-annee-item {
+      background-color: lightgray;
+      font-size: 3vw;
+      border: 10px solid #00a933;
+      border-radius: 2vh;
+      width: 9.1vw;
+
+      text-align: center;
+    }
+  }
+}
+
+@keyframes zoomImage {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes apparitionTexte {
+  0% {
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    clip-path: inset(0 0 0% 0);
+  }
+}
