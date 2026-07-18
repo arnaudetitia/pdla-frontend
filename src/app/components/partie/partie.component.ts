@@ -1,7 +1,7 @@
 import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
 import { PartieService } from '../../services/partie.service';
 import { PartieStore } from '../../stores/partie.store';
-import { combineLatest, switchMap, tap } from 'rxjs';
+import { combineLatest, forkJoin, switchMap, tap } from 'rxjs';
 import { Question } from '../../model/question.model';
 import { PartieOrchestrator } from '../../orchestrator/partie.orchestrator';
 import { EtatQuestion } from '../../model/enums/etat-question.enum';
@@ -84,12 +84,21 @@ export class PartieComponent implements OnInit {
               } else {
                 this.currentAnnee.set(this.MIN_YEAR);
                 this.currentMarge.set(DEFAULT_MARGE);
-                this.equipeService.changerTour().subscribe();
+                this.equipeService
+                  .changerTour()
+                  .pipe(
+                    switchMap(() => {
+                      return this.partieService.toggleVotes(false);
+                    }),
+                  )
+                  .subscribe();
               }
-
               break;
             case EtatQuestion.IMAGE_AFFICHEE:
               MusicPlayer.playMusic(this.currentQuestion().musique);
+              break;
+            case EtatQuestion.QUESTION_AFFICHEE:
+              this.partieService.toggleVotes(true).subscribe();
               break;
             case EtatQuestion.REPONSE_REVELEE:
               const ecart = Math.abs(this.currentAnnee() - this.currentQuestion().annee);
