@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.dev';
+import { environment } from '../../environments/environment';
 import { io, Socket } from 'socket.io-client';
 import { ReponsesStore } from '../stores/reponses.store';
 import { PartieOrchestrator } from '../orchestrator/partie.orchestrator';
