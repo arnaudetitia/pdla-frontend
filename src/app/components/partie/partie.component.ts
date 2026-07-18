@@ -31,7 +31,7 @@ export class PartieComponent implements OnInit {
   EtatQuestion = EtatQuestion;
 
   listeQuestions = signal<Question[]>([]);
-  indexCurrentQuestion = signal(17);
+  indexCurrentQuestion = signal(1);
 
   currentQuestion = computed(() => {
     return this.listeQuestions()[this.indexCurrentQuestion() - 1];
@@ -119,6 +119,10 @@ export class PartieComponent implements OnInit {
       this.currentAnnee() - annee >= this.MIN_YEAR &&
       this.currentAnnee() - annee <= this.MAX_YEAR
     );
+  }
+
+  horsFrise() {
+    return Math.abs(this.currentAnnee() - this.currentQuestion().annee) > 5;
   }
 
   @HostListener('window:keydown', ['$event'])
