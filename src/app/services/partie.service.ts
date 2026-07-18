@@ -24,4 +24,8 @@ export class PartieService {
   getPartieById(idPartie: number): Observable<Question[]> {
     return this.http.get<Question[]>(environment.apiUrl + `/parties/${idPartie}`);
   }
+
+  makePartieTermine() {
+    return this.http.put(environment.apiUrl + `/partie/fin`, {});
+  }
 }

@@ -31,7 +31,7 @@ export class PartieComponent implements OnInit {
   EtatQuestion = EtatQuestion;
 
   listeQuestions = signal<Question[]>([]);
-  indexCurrentQuestion = signal(1);
+  indexCurrentQuestion = signal(17);
 
   currentQuestion = computed(() => {
     return this.listeQuestions()[this.indexCurrentQuestion() - 1];
@@ -80,6 +80,7 @@ export class PartieComponent implements OnInit {
               this.indexCurrentQuestion.update((prev) => prev + 1);
               if (this.indexCurrentQuestion() > this.listeQuestions().length) {
                 this.partieTermine.set(true);
+                this.partieService.makePartieTermine().subscribe();
               } else {
                 this.currentAnnee.set(this.MIN_YEAR);
                 this.currentMarge.set(DEFAULT_MARGE);
