@@ -103,8 +103,13 @@ export class GestionQuestionComponent implements OnInit {
   }
 
   playExtrait(extraitName: string) {
+    if (this.extraitEnEcoute) {
+      this.arreterExtrait();
+    }
     this.nomExtraitEnEcoute.set(extraitName);
-    this.extraitEnEcoute = new Audio(`/assets/extraits/${this.nomExtraitEnEcoute()}.mp3`);
+    this.extraitEnEcoute = new Audio(
+      `https://qzbbzhygbgzincuuuzqa.supabase.co/storage/v1/object/public/pdla-extraits/${this.nomExtraitEnEcoute()}.mp3`,
+    );
     this.extraitEnEcoute.play();
     this.extraitEnEcoute.onended = () => {
       this.nomExtraitEnEcoute.set('');
