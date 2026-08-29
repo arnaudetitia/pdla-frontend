@@ -9,9 +9,10 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 export const routes: Routes = [
   { path: '', component: HomepageComponent, canActivate: [homepageGuard] },
   { path: '403', component: ForbiddenComponent },
-  { path: 'partie', component: PartieComponent },
+  { path: 'partie', canActivate: [homepageGuard], component: PartieComponent },
   {
     path: 'admin',
+    canActivate: [homepageGuard],
     children: [
       { path: 'question', component: GestionQuestionComponent },
       { path: 'partie', component: GestionPartieComponent },
