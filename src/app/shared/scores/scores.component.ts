@@ -20,15 +20,21 @@ interface ScoreRow {
 export class ScoresComponent implements OnInit {
   @Input() afficherVainqueur: boolean = false;
 
+  @Input()
+  set nbQuestions(nbQuestions: number) {
+    this.indexMancheArray = Array.from({ length: nbQuestions / 2 }, (_, i) => i);
+    this.displayedColumns = [
+      'nomEquipe',
+      ...this.indexMancheArray.map((index) => `manche-${index + 1}`),
+      'total',
+    ];
+  }
+
   scores = signal(new MatTableDataSource<ScoreRow>([]));
 
-  indexMancheArray = Array.from({ length: 10 }, (_, i) => i);
+  indexMancheArray: number[] = [];
 
-  displayedColumns = [
-    'nomEquipe',
-    ...this.indexMancheArray.map((index) => `manche-${index + 1}`),
-    'total',
-  ];
+  displayedColumns: string[] = [];
 
   equipeGagnante: string = '';
   egalitePoints: boolean = false;
