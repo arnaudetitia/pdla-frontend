@@ -5,6 +5,18 @@
       <mat-label>Nom de la partie</mat-label>
       <input matInput formControlName="nomPartie" />
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Type de partie</mat-label>
+      <mat-select formControlName="nombreTours" (selectionChange)="updateNbQuestionTotales($event)">
+        @for (typePartie of typesPartieList; track typePartie) {
+          <mat-option
+            [value]="typePartie.nbTours"
+            [disabled]="nbQuestionsSelected() > 2 * typePartie.nbTours && nbQuestionTotales() > 0"
+            >Partie {{ typePartie.label }} : {{ typePartie.nbTours }} tours</mat-option
+          >
+        }
+      </mat-select>
+    </mat-form-field>
     <div class="questions-list-form">
       <mat-form-field class="questions-list-selector">
         <mat-label>Liste des questions</mat-label>
@@ -32,10 +44,11 @@
       >
         @if (nbQuestionsSelected() === 0) {
           Veuillez selectionner au moins une question
-        } @else if (nbQuestionsSelected() === 20) {
+        } @else if (nbQuestionsSelected() === nbQuestionTotales()) {
           Vous avez sélectionné toutes les questions
         } @else {
-          Ajouter les {{ 20 - nbQuestionsSelected() }} questions suivantes
+          Ajouter les
+          {{ nbQuestionTotales() - nbQuestionsSelected() }} questions suivantes
         }
       </button>
     </div>

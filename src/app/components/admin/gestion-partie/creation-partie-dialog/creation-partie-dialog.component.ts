@@ -10,6 +10,7 @@ import { Question } from '../../../../model/question.model';
 import { PartieService } from '../../../../services/partie.service';
 import { GestionPartieComponent } from '../gestion-partie.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TypePartie } from '../../../../model/type-partie.model';
 
 @Component({
   selector: 'app-creation-partie-dialog.component',
@@ -32,14 +33,30 @@ export class CreationPartieDialogComponent implements OnInit {
 
   allQuestions = signal<Question[]>([]);
   nbQuestionsSelected = signal<number>(0);
+  nbQuestionTotales = signal<number>(0);
 
   canMassAjoutBeClicked = computed(() => {
-    return ![0, 20].includes(this.nbQuestionsSelected());
+    return ![0, this.nbQuestionTotales()].includes(this.nbQuestionsSelected());
   });
 
   nbMaxQuestionSelected = computed(() => {
-    return this.nbQuestionsSelected() === 20;
+    return this.nbQuestionsSelected() === this.nbQuestionTotales();
   });
+
+  typesPartieList: TypePartie[] = [
+    {
+      label: 'Express',
+      nbTours: 3,
+    },
+    {
+      label: 'Normale',
+      nbTours: 5,
+    },
+    {
+      label: 'Longue',
+      nbTours: 10,
+    },
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +65,7 @@ export class CreationPartieDialogComponent implements OnInit {
   ) {
     this.partieForm = this.formBuilder.group({
       nomPartie: ['', [Validators.required]],
+      nombreTours: [null, [Validators.required]],
       listeQuestions: [[]],
     });
   }
@@ -66,12 +84,17 @@ export class CreationPartieDialogComponent implements OnInit {
   ajouterQuestions() {
     const listeIndex = this.partieForm.get('listeQuestions')?.value;
     const maxIndex = listeIndex[listeIndex.length - 1];
+    const nbQuestionsAAjouter = this.partieForm.get('nombreTours')?.value * 2;
     const otherQuestionsIndex = this.allQuestions()
       .filter((question) => question.id > maxIndex)
       .map((question) => question.id)
-      .slice(0, 20 - this.nbQuestionsSelected());
+      .slice(0, nbQuestionsAAjouter - this.nbQuestionsSelected());
     this.partieForm.patchValue({ listeQuestions: [...listeIndex, ...otherQuestionsIndex] });
     this.updateEtatSelection(this.partieForm.get('listeQuestions'));
+  }
+
+  updateNbQuestionTotales($event: any) {
+    this.nbQuestionTotales.set(2 * $event.value);
   }
 
   updateEtatSelection($event: any) {
@@ -81,7 +104,7 @@ export class CreationPartieDialogComponent implements OnInit {
   creerPartie() {
     const partieToCreate = {
       nomPartie: this.partieForm.get('nomPartie')?.value.trim(),
-      idsQuestions: this.partieForm.get('listeQuestions')?.value.trim(),
+      idsQuestions: this.partieForm.get('listeQuestions')?.value,
     };
 
     this.partieService
