@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ScoresComponent } from '../../../shared/scores/scores.component';
-import { MatDialogModule, MatDialogTitle } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogTitle } from '@angular/material/dialog';
 
 @Component({
   selector: 'score-dialog',
@@ -8,4 +8,6 @@ import { MatDialogModule, MatDialogTitle } from '@angular/material/dialog';
   templateUrl: './score-dialog.component.html',
   styleUrl: './score-dialog.component.scss',
 })
-export class ScoreDialogComponent {}
+export class ScoreDialogComponent {
+  data = inject<{ nbQuestions: number }>(MAT_DIALOG_DATA);
+}

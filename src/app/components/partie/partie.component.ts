@@ -155,6 +155,9 @@ export class PartieComponent implements OnInit {
           const dialogRef = this.openScoresDialog.open(ScoreDialogComponent, {
             width: '75vw',
             disableClose: true,
+            data: {
+              nbQuestions: this.listeQuestions().length,
+            },
           });
         } else {
           this.openScoresDialog.closeAll();
