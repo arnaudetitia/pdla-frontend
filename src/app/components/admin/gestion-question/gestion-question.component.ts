@@ -84,13 +84,11 @@ export class GestionQuestionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    combineLatest([this.questionService.getAllQuestion(), this.activatedRoute.queryParams])
+    this.questionService
+      .getAllQuestion()
       .pipe(
-        tap(([questions, params]) => {
+        tap((questions) => {
           this.allQuestions().data = questions;
-          if (params['idPartie']) {
-            this.idPartieFromUrl.set(Number.parseInt(params['idPartie']));
-          }
         }),
       )
       .subscribe();
