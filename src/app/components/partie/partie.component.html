@@ -1,5 +1,6 @@
 <div class="partie-container">
   @if (!partieTermine()) {
+    <div class="champ equipe-en-jeu">Au tour de l'équipe {{ currentEquipe() }}</div>
     <div class="question-container">
       @if (currentEtatQuestion() !== EtatQuestion.START_QUESTION) {
         <div class="champ image-question-container">

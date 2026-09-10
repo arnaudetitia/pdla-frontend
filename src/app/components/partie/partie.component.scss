@@ -10,6 +10,12 @@
 
   font-family: 'Bahnschrift';
 
+  .equipe-en-jeu {
+    margin-bottom: 2vh;
+    text-align: center;
+    font-size: 3vh;
+  }
+
   .question-container {
     display: flex;
     flex-direction: row;
@@ -68,7 +74,7 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      height: 40vh;
+      height: 30vh;
 
       .frise-item {
         flex: 1;
