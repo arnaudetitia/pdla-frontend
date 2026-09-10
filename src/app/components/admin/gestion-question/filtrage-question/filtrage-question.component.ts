@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { Partie } from '../../../../model/partie.model';
 import { PartieService } from '../../../../services/partie.service';
-import { tap } from 'rxjs';
+import { combineLatest, tap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'filtrage-question',
@@ -15,8 +16,6 @@ import { tap } from 'rxjs';
   styleUrl: './filtrage-question.component.scss',
 })
 export class FiltrageQuestionComponent implements OnInit {
-  @Input() idPartieFromUrl: number | null = null;
-
   readonly YEAR_MIN = 1950;
   readonly YEAR_MAX = new Date().getUTCFullYear();
   FiltreQuestionType = FiltreQuestionType;
@@ -47,16 +46,21 @@ export class FiltrageQuestionComponent implements OnInit {
     value: string | { borneMin: number; borneMax: number } | number[] | null;
   }>();
 
-  constructor(private partieService: PartieService) {}
+  constructor(
+    private partieService: PartieService,
+    private activatedRoute: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
-    this.partieService
-      .getAllParties()
+    combineLatest([this.partieService.getAllParties(), this.activatedRoute.queryParams])
       .pipe(
-        tap((parties) => {
+        tap(([parties, queryParams]) => {
           this.allParties.set(parties);
-          if (this.idPartieFromUrl) {
-            const partie = this.allParties().find((partie) => partie.id === this.idPartieFromUrl);
+          const idPartieFromUrl = queryParams['idPartie'];
+          if (idPartieFromUrl) {
+            const partie = this.allParties().find(
+              (partie) => partie.id === Number.parseInt(idPartieFromUrl),
+            );
             if (partie) {
               this.currentFiltreType.set(FiltreQuestionType.PARTIE);
               this.currentFiltreTypeLabel.set('PARTIE');
