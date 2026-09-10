@@ -1,7 +1,7 @@
 import { Component, computed, HostListener, inject, OnInit, signal } from '@angular/core';
 import { PartieService } from '../../services/partie.service';
 import { PartieStore } from '../../stores/partie.store';
-import { combineLatest, switchMap, tap } from 'rxjs';
+import { combineLatest, switchMap, tap, withLatestFrom } from 'rxjs';
 import { Question } from '../../model/question.model';
 import { PartieOrchestrator } from '../../orchestrator/partie.orchestrator';
 import { EtatQuestion } from '../../model/enums/etat-question.enum';
@@ -41,6 +41,7 @@ export class PartieComponent implements OnInit {
 
   currentAnnee = signal<number>(this.MIN_YEAR);
   currentMarge = signal<Marge>(DEFAULT_MARGE);
+  currentEquipe = signal<string>('');
 
   friseRange = Array.from({ length: 11 }, (_, i) => i);
 
@@ -66,8 +67,10 @@ export class PartieComponent implements OnInit {
         switchMap((idPartie) => {
           return this.partieService.getPartieById(idPartie || 1);
         }),
-        tap((questions) => {
+        withLatestFrom(this.equipeService.getEquipeEnJeu()),
+        tap(([questions, equipe]) => {
           this.listeQuestions.set(questions);
+          this.currentEquipe.set(equipe);
         }),
       )
       .subscribe();
@@ -88,7 +91,13 @@ export class PartieComponent implements OnInit {
                   .changerTour()
                   .pipe(
                     switchMap(() => {
-                      return this.partieService.toggleVotes(false);
+                      return combineLatest([
+                        this.equipeService.getEquipeEnJeu(),
+                        this.partieService.toggleVotes(false),
+                      ]);
+                    }),
+                    tap(([equipe, d]) => {
+                      this.currentEquipe.set(equipe);
                     }),
                   )
                   .subscribe();
