@@ -8,10 +8,21 @@ import { Partie } from '../../../../model/partie.model';
 import { PartieService } from '../../../../services/partie.service';
 import { combineLatest, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'filtrage-question',
-  imports: [MatSelectModule, MatOptionModule, MatInputModule, FormsModule],
+  imports: [
+    MatSelectModule,
+    MatOptionModule,
+    MatInputModule,
+    MatIconModule,
+    MatIconButton,
+    MatTooltipModule,
+    FormsModule,
+  ],
   templateUrl: './filtrage-question.component.html',
   styleUrl: './filtrage-question.component.scss',
 })
@@ -84,6 +95,15 @@ export class FiltrageQuestionComponent implements OnInit {
     this.borneMin.set(this.YEAR_MIN);
     this.borneMax.set(this.YEAR_MAX);
     this.onFiltreValueChange.emit({} as any);
+  }
+
+  resetFilter() {
+    this.borneMin.set(this.YEAR_MIN);
+    this.borneMax.set(this.YEAR_MAX);
+    this.selectedPartie.set(null);
+    this.currentFiltreType.set(null);
+    this.currentFiltreTypeLabel.set('');
+    this.onFiltreValueChange.emit({} as { typeFiltre: FiltreQuestionType; value: any });
   }
 
   onFilterValueChange($event: any) {
