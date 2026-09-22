@@ -6,4 +6,14 @@
   mat-form-field {
     margin-right: 1vw;
   }
+
+  [matIconButton] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -2vh;
+    color: white;
+    transform: scale(1.5);
+  }
 }
