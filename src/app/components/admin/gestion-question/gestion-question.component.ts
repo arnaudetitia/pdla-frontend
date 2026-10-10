@@ -13,6 +13,7 @@ import { FiltrageQuestionComponent } from './filtrage-question/filtrage-question
 import { FiltreQuestionType } from '../../../model/enums/filtre-type.enum';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-gestion-question.component',
@@ -106,7 +107,7 @@ export class GestionQuestionComponent implements OnInit {
     }
     this.nomExtraitEnEcoute.set(extraitName);
     this.extraitEnEcoute = new Audio(
-      `https://qzbbzhygbgzincuuuzqa.supabase.co/storage/v1/object/public/pdla-extraits/${this.nomExtraitEnEcoute()}.mp3`,
+      `https://${environment.supabaseProject}.supabase.co/storage/v1/object/public/pdla-extraits/${this.nomExtraitEnEcoute()}.mp3`,
     );
     this.extraitEnEcoute.play();
     this.extraitEnEcoute.onended = () => {
