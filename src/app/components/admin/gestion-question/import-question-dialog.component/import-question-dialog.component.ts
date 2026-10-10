@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { QuestionService } from '../../../../services/question.service';
 import { tap } from 'rxjs';
@@ -24,6 +24,10 @@ export class ImportQuestionDialogComponent {
   errorsImport = signal<ImportError[]>([]);
   fileName = signal<string>('');
 
+  canImportFile = computed(
+    () => this.errorsImport().filter((error) => error.type === 'error').length === 0,
+  );
+
   constructor(private questionService: QuestionService) {}
 
   onFileSelected($event: Event) {
@@ -48,7 +52,6 @@ export class ImportQuestionDialogComponent {
       .checkImportQuestions(this.csvFileContent())
       .pipe(
         tap((reponse: { erreurs: ImportError[]; questions: Question[] }) => {
-          console.log('coucou');
           this.isChecking.set(false);
           this.checkDone.set(true);
           this.errorsImport.set(reponse.erreurs);

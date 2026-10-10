@@ -57,7 +57,7 @@
   <button
     class="btn champ importer"
     (click)="importQuestions()"
-    [disabled]="!checkDone() || errorsImport().length"
+    [disabled]="!checkDone() || !canImportFile()"
   >
     Importer le fichier
   </button>
