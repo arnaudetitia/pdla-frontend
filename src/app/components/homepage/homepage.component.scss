@@ -11,14 +11,9 @@
 
   overflow-y: auto;
 
-  .pdla-logo-container {
-    margin-top: -30vh;
-    height: 70vh;
-    overflow: hidden;
-    .pdla-logo {
-      padding-top: 5vh;
-      transform: scale(0.75);
-    }
+  img {
+    width: auto;
+    height: 40vh;
   }
 
   .homepage-menu {
