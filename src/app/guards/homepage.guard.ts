@@ -1,27 +1,37 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { inject } from '@angular/core';
-import { AdminService } from '../services/admin.service';
-import { catchError, map, of } from 'rxjs';
-
-const ADMIN_PASSWORD = 'ADMIN_PASSWORD';
+import moment from 'moment';
+import { EtatPartieKeys } from '../model/enums/etat-partie.enum';
 
 export const homepageGuard: CanActivateFn = () => {
   if (environment.production) {
     const router = inject(Router);
-    const adminService = inject(AdminService);
-    let mdpAdmin = localStorage.getItem(ADMIN_PASSWORD);
-    if (!mdpAdmin) {
-      mdpAdmin = prompt('Mot de passe pour acceder au site :');
+    let mdpAdmin = localStorage.getItem(EtatPartieKeys.ALREADY_LOGGED);
+    if (!mdpAdmin || isExpired()) {
+      return router.parseUrl('/login');
     }
-    return adminService.checkAdmin(mdpAdmin || '').pipe(
-      map(() => {
-        localStorage.setItem(ADMIN_PASSWORD, mdpAdmin || '');
-        return true;
-      }),
-      catchError(() => of(router.parseUrl('/403'))),
-    );
+    return true;
   }
 
   return true;
+};
+
+const isExpired: () => boolean = () => {
+  const dateExpirationString = localStorage.getItem(EtatPartieKeys.EXPIRATION_DATE);
+
+  if (!dateExpirationString) {
+    localStorage.clear();
+    return true;
+  }
+
+  const dateExpiration = moment(dateExpirationString);
+  const dateCourante = moment();
+
+  if (dateCourante.isAfter(dateExpiration)) {
+    localStorage.clear();
+    return true;
+  }
+
+  return false;
 };

@@ -4,12 +4,12 @@ import { GestionQuestionComponent } from './components/admin/gestion-question/ge
 import { GestionPartieComponent } from './components/admin/gestion-partie/gestion-partie.component';
 import { PartieComponent } from './components/partie/partie.component';
 import { homepageGuard } from './guards/homepage.guard';
-import { ForbiddenComponent } from './components/forbidden/forbidden.component';
+import { LoginAdminComponent } from './components/login-admin/login-admin.component';
 
 export const routes: Routes = [
   { path: '', component: HomepageComponent, canActivate: [homepageGuard] },
-  { path: '403', component: ForbiddenComponent },
-  { path: 'partie', canActivate: [homepageGuard], component: PartieComponent },
+  { path: 'login', component: LoginAdminComponent },
+  { path: 'partie', component: PartieComponent },
   {
     path: 'admin',
     canActivate: [homepageGuard],
