@@ -1,0 +1,4 @@
+export enum EtatPartieKeys {
+  ALREADY_LOGGED = 'ALREADY_LOGGED',
+  EXPIRATION_DATE = 'EXPIRATION_DATE',
+}
