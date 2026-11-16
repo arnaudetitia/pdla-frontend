@@ -3,4 +3,5 @@ export enum CodeTouches {
   SUIVANT = 'ArrowRight',
   PLAY_MUSIC_AGAIN = 'KeyP',
   SCORES = 'KeyS',
+  QR_CODE = 'KeyA',
 }

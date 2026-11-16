@@ -1,0 +1,19 @@
+.qr-code-container {
+  background-color: blue;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 3vh;
+
+  qrcode {
+    margin-top: 2vh;
+  }
+}
+
+.champ {
+  background-color: yellow;
+  border-color: orange;
+}
