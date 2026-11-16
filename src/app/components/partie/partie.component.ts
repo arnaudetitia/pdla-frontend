@@ -16,6 +16,7 @@ import { EquipeStore } from '../../stores/equipe.store';
 import { MatDialog } from '@angular/material/dialog';
 import { ScoreDialogComponent } from './score-dialog.component/score-dialog.component';
 import { ScoresComponent } from '../../shared/scores/scores.component';
+import { QrCodeDialogComponent } from './qr-code-dialog/qr-code-dialog.component';
 
 @Component({
   selector: 'app-partie.component',
@@ -27,6 +28,8 @@ export class PartieComponent implements OnInit {
   readonly spacebarCode = 'Space';
   readonly MIN_YEAR = 1950;
   readonly MAX_YEAR = new Date().getFullYear();
+
+  qrCodeDialog = inject(MatDialog);
 
   EtatQuestion = EtatQuestion;
 
@@ -146,6 +149,12 @@ export class PartieComponent implements OnInit {
   @HostListener('window:keydown', ['$event'])
   handleKeyEvent(event$: KeyboardEvent) {
     switch (event$.code) {
+      case CodeTouches.QR_CODE:
+        this.qrCodeDialog.open(QrCodeDialogComponent, {
+          disableClose: true,
+          width: '75vw',
+        });
+        break;
       case CodeTouches.ESPACE:
         if (
           ![EtatQuestion.QUESTION_AFFICHEE, EtatQuestion.REPONSE_REVELEE].includes(
